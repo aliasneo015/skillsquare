@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launching Soon - SkillSquare</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: #ffffff;
+            color: #333333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.dark-theme {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #dc2626;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.dark-theme .logo {
+            background: linear-gradient(135deg, #ff4444 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #dc2626;
+        }
+
+        body.dark-theme h1 {
+            color: #ff4444;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .email-section {
+            margin-top: 40px;
+        }
+
+        .email-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333333;
+        }
+
+        body.dark-theme .email-label {
+            color: #f0f0f0;
+        }
+
+        .email-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .email-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 14px 18px;
+            border: 2px solid #dc2626;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #ffffff;
+            color: #333333;
+        }
+
+        body.dark-theme .email-input {
+            background-color: #2a2a2a;
+            color: #f0f0f0;
+            border-color: #ff4444;
+        }
+
+        .email-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+        }
+
+        body.dark-theme .email-input:focus {
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+        }
+
+        .email-input::placeholder {
+            color: #999999;
+        }
+
+        body.dark-theme .email-input::placeholder {
+            color: #777777;
+        }
+
+        .subscribe-btn {
+            padding: 14px 32px;
+            background-color: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .subscribe-btn:hover {
+            background-color: #991b1b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .subscribe-btn:active {
+            transform: translateY(0);
+        }
+
+        body.dark-theme .subscribe-btn:hover {
+            background-color: #ff4444;
+        }
+
+        .success-message {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #10b981;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            animation: slideIn 0.3s ease;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #dc2626;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .features {
+            margin-top: 50px;
+            padding-top: 40px;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        body.dark-theme .features {
+            border-top-color: #333333;
+        }
+
+        .features-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #dc2626;
+        }
+
+        body.dark-theme .features-title {
+            color: #ff4444;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-item {
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-theme .feature-item {
+            background-color: #2a2a2a;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            .theme-toggle {
+                top: 20px;
+                right: 20px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .logo {
+                font-size: 36px;
+            }
+
+            .email-container {
+                flex-direction: column;
+            }
+
+            .email-input {
+                min-width: 100%;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Switch -->
+    <div class="theme-toggle">
+        <label class="toggle-switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="toggle-slider"></span>
+        </label>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="header">
+            <div class="logo">SkillSquare</div>
+            <h1>Launching Soon</h1>
+            <p class="subtitle">
+                Get ready for an amazing platform where skills meet opportunities. 
+                Join us for an exciting journey ahead!
+            </p>
+        </div>
+
+        <!-- Email Subscription Section -->
+        <div class="email-section">
+            <label class="email-label">Be the first to know</label>
+            <form id="emailForm" onsubmit="handleSubscribe(event)">
+                <div class="email-container">
+                    <input 
+                        type="email" 
+                        class="email-input" 
+                        id="emailInput" 
+                        placeholder="Enter your email address" 
+                        required
+                    >
+                    <button type="submit" class="subscribe-btn">Notify Me</button>
+                </div>
+            </form>
+            <div id="successMessage" class="success-message">
+                ✓ Thank you! Check your email for updates.
+            </div>
+            <div id="errorMessage" class="error-message">
+                ✗ Something went wrong. Please try again.
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features">
+            <div class="features-title">What's Coming</div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">📚</div>
+                    <div class="feature-text">Learn New Skills</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🤝</div>
+                    <div class="feature-text">Connect & Collaborate</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🚀</div>
+                    <div class="feature-text">Grow Your Career</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-text">Achieve Goals</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Check for saved theme preference or default to light theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-theme');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', function() {
+            body.classList.toggle('dark-theme');
+            const newTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Email Subscription Handler
+        function handleSubscribe(event) {
+            event.preventDefault();
+            
+            const emailInput = document.getElementById('emailInput');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const email = emailInput.value;
+
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            // Basic email validation
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            // Simulate sending email (in production, this would call a backend API)
+            try {
+                // Store email (can be replaced with actual API call)
+                console.log('Email subscribed:', email);
+                
+                // Show success message
+                successMessage.style.display = 'block';
+                emailInput.value = '';
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            } catch (error) {
+                errorMessage.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
